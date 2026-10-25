@@ -1,0 +1,240 @@
+/*
+ * Design tokens and base styles. The values come from the Lovable mock-up.
+ * The style guide page at /style-guide shows them.
+ */
+
+:root {
+	/* Colours */
+	--color-red: oklch(56% 0.215 26);
+	--color-red-hover: oklch(50% 0.2 26);
+	--color-on-red: oklch(99% 0 0);
+
+	--color-ink: oklch(17% 0.008 260);
+	--color-ink-border: oklch(30% 0.01 260);
+	--color-ink-text: oklch(97% 0.002 260);
+	--color-ink-muted: oklch(70% 0.01 260);
+
+	--color-text: oklch(18% 0.01 260);
+	--color-text-muted: oklch(47% 0.012 260);
+	--color-bg: oklch(98.5% 0.002 260);
+	--color-surface: oklch(100% 0 0);
+	--color-bg-alt: oklch(95.5% 0.003 260);
+	--color-border: oklch(90% 0.005 260);
+
+	/* Fonts (the variables are set by Astro's <Font> component) */
+	--font-body: var(--font-barlow), system-ui, sans-serif;
+	--font-heading: var(--font-barlow-condensed), 'Arial Narrow', sans-serif;
+
+	/* Type scale, phone first. Sizes grow with the screen up to the desktop size. */
+	--text-display: clamp(3rem, 1.9rem + 4.7vw, 6rem);
+	--text-h1: clamp(2.5rem, 1.9rem + 2.6vw, 4rem);
+	--text-h2: clamp(2.25rem, 1.95rem + 1.3vw, 3rem);
+	--text-h3: clamp(1.5rem, 1.35rem + 0.65vw, 1.875rem);
+	--text-lead: clamp(1.125rem, 1.05rem + 0.3vw, 1.25rem);
+	--text-body: 1rem;
+	--text-small: 0.875rem;
+
+	/* Spacing and layout */
+	--space-section: clamp(3.5rem, 2.6rem + 3.8vw, 5rem);
+	--container-max: 72rem;
+	--gutter: clamp(1rem, 0.5rem + 2.5vw, 1.5rem);
+	--header-height: 4rem;
+
+	--radius: 0.375rem;
+	--radius-button: 0.25rem;
+	--shadow-card: 0 1px 2px oklch(18% 0.01 260 / 0.06), 0 8px 24px -12px oklch(18% 0.01 260 / 0.18);
+}
+
+/* Base */
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html {
+	-webkit-text-size-adjust: 100%;
+	scroll-padding-top: calc(var(--header-height) + 1rem);
+}
+
+/* Keeps the footer at the bottom of short pages. */
+body {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+	margin: 0;
+	background: var(--color-bg);
+	color: var(--color-text);
+	font-family: var(--font-body);
+	font-size: var(--text-body);
+	line-height: 1.5;
+}
+
+main {
+	flex: 1;
+}
+
+img,
+svg {
+	display: block;
+	max-width: 100%;
+}
+
+a {
+	color: inherit;
+}
+
+:focus-visible {
+	outline: 2px solid var(--color-red);
+	outline-offset: 3px;
+}
+
+h1,
+h2,
+h3 {
+	margin: 0;
+	font-family: var(--font-heading);
+	font-weight: 700;
+	line-height: 1.05;
+	letter-spacing: 0.005em;
+	text-wrap: balance;
+}
+
+h1 {
+	font-size: var(--text-h1);
+}
+
+h2 {
+	font-size: var(--text-h2);
+}
+
+h3 {
+	font-size: var(--text-h3);
+}
+
+p {
+	margin: 0;
+}
+
+/* Layout */
+
+.container {
+	width: 100%;
+	max-width: var(--container-max);
+	margin-inline: auto;
+	padding-inline: var(--gutter);
+}
+
+.section {
+	padding-block: var(--space-section);
+}
+
+.section--alt {
+	background: var(--color-bg-alt);
+}
+
+.section--ink {
+	background: var(--color-ink);
+	color: var(--color-ink-text);
+}
+
+/* Text */
+
+.display {
+	font-family: var(--font-heading);
+	font-size: var(--text-display);
+	font-weight: 700;
+	line-height: 1;
+	text-wrap: balance;
+}
+
+.lead {
+	font-size: var(--text-lead);
+	line-height: 1.6;
+	color: var(--color-text-muted);
+}
+
+.section--ink .lead {
+	color: var(--color-ink-muted);
+}
+
+/* The small red label above a section heading. Sentence case, never capitals. */
+.eyebrow {
+	margin-bottom: 0.75rem;
+	font-family: var(--font-heading);
+	font-size: 1rem;
+	font-weight: 600;
+	letter-spacing: 0.02em;
+	color: var(--color-red);
+}
+
+.accent {
+	color: var(--color-red);
+}
+
+.visually-hidden {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+}
+
+/* Buttons */
+
+.button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	min-height: 2.75rem;
+	padding: 0.625rem 1.5rem;
+	border: 1px solid transparent;
+	border-radius: var(--radius-button);
+	font-family: var(--font-body);
+	font-size: var(--text-body);
+	font-weight: 500;
+	line-height: 1.25;
+	text-decoration: none;
+	cursor: pointer;
+	transition:
+		background-color 0.15s,
+		border-color 0.15s;
+}
+
+.button--primary {
+	background: var(--color-red);
+	color: var(--color-on-red);
+}
+
+.button--primary:hover {
+	background: var(--color-red-hover);
+}
+
+.button--secondary {
+	border-color: var(--color-border);
+	background: var(--color-surface);
+	color: var(--color-text);
+}
+
+.button--secondary:hover {
+	border-color: var(--color-text-muted);
+}
+
+.section--ink .button--secondary {
+	border-color: var(--color-ink-border);
+	background: transparent;
+	color: var(--color-ink-text);
+}
+
+.section--ink .button--secondary:hover {
+	border-color: var(--color-ink-muted);
+}
+
+.button--small {
+	min-height: 2.5rem;
+	padding: 0.5rem 1rem;
+	font-size: var(--text-small);
+}
