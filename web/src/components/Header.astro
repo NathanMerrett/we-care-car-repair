@@ -1,0 +1,206 @@
+---
+import { business, isConfirmed } from '../data/business';
+import Wordmark from './Wordmark.astro';
+
+const nav = [
+	{ href: '/', label: 'Home' },
+	{ href: '/services', label: 'Services' },
+	{ href: '/contact', label: 'Find us' },
+];
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+---
+
+<header class="site-header" data-menu-open="false">
+	<div class="container site-header__inner">
+		<Wordmark />
+
+		<button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+			<span class="visually-hidden">Menu</span>
+			<svg class="menu-toggle__open" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+				<path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+			</svg>
+			<svg class="menu-toggle__close" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+				<path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+			</svg>
+		</button>
+
+		<nav class="site-nav" id="site-nav" aria-label="Main">
+			<ul>
+				{
+					nav.map((item) => (
+						<li>
+							<a href={item.href} aria-current={path === item.href ? 'page' : undefined}>
+								{item.label}
+							</a>
+						</li>
+					))
+				}
+			</ul>
+		</nav>
+
+		<div class="site-header__actions">
+			{
+				isConfirmed(business.phone) && (
+					<a class="site-header__phone" href={`tel:${business.phone.replace(/\s/g, '')}`}>
+						{business.phone}
+					</a>
+				)
+			}
+			<a class="button button--primary button--small" href="/book">Book online</a>
+		</div>
+	</div>
+</header>
+
+<script>
+	const header = document.querySelector<HTMLElement>('.site-header');
+	const toggle = document.querySelector<HTMLButtonElement>('.menu-toggle');
+
+	toggle?.addEventListener('click', () => {
+		const open = toggle.getAttribute('aria-expanded') !== 'true';
+		toggle.setAttribute('aria-expanded', String(open));
+		header?.setAttribute('data-menu-open', String(open));
+	});
+</script>
+
+<style>
+	.site-header {
+		position: sticky;
+		top: 0;
+		z-index: 10;
+		border-bottom: 1px solid var(--color-border);
+		background: color-mix(in oklch, var(--color-bg) 90%, transparent);
+		backdrop-filter: blur(8px);
+	}
+
+	/* Phone: name, Book button and menu button on one row; links drop down. */
+	.site-header__inner {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		min-height: var(--header-height);
+	}
+
+	.site-header__inner > :global(.wordmark) {
+		margin-right: auto;
+	}
+
+	.site-header__actions {
+		display: flex;
+		align-items: center;
+		gap: 1.25rem;
+		order: 1;
+	}
+
+	.menu-toggle {
+		display: grid;
+		place-items: center;
+		order: 2;
+		width: 2.5rem;
+		height: 2.5rem;
+		padding: 0;
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-button);
+		background: var(--color-surface);
+		color: var(--color-text);
+		cursor: pointer;
+	}
+
+	.menu-toggle__close,
+	.menu-toggle[aria-expanded='true'] .menu-toggle__open {
+		display: none;
+	}
+
+	.menu-toggle[aria-expanded='true'] .menu-toggle__close {
+		display: block;
+	}
+
+	.site-nav {
+		display: none;
+		position: absolute;
+		top: 100%;
+		left: 0;
+		right: 0;
+		border-bottom: 1px solid var(--color-border);
+		background: var(--color-bg);
+	}
+
+	.site-header[data-menu-open='true'] .site-nav {
+		display: block;
+	}
+
+	.site-nav ul {
+		margin: 0;
+		padding: 0.5rem var(--gutter) 1rem;
+		list-style: none;
+	}
+
+	.site-nav a {
+		display: block;
+		padding-block: 0.75rem;
+		font-family: var(--font-heading);
+		font-size: 1.25rem;
+		font-weight: 600;
+		color: var(--color-text-muted);
+		text-decoration: none;
+	}
+
+	.site-nav a:hover,
+	.site-nav a[aria-current='page'] {
+		color: var(--color-text);
+	}
+
+	.site-nav a[aria-current='page'] {
+		text-decoration: underline;
+		text-decoration-color: var(--color-red);
+		text-decoration-thickness: 2px;
+		text-underline-offset: 0.4em;
+	}
+
+	.site-header__phone {
+		display: none;
+		font-size: var(--text-small);
+		font-weight: 500;
+		text-decoration: none;
+	}
+
+	/* Desktop: name on the left, links in the middle, Book button on the right. */
+	@media (min-width: 48rem) {
+		.site-header__inner {
+			display: grid;
+			grid-template-columns: 1fr auto 1fr;
+			gap: 2rem;
+		}
+
+		.menu-toggle {
+			display: none;
+		}
+
+		.site-nav,
+		.site-header[data-menu-open='true'] .site-nav {
+			display: block;
+			position: static;
+			border: 0;
+			background: none;
+		}
+
+		.site-nav ul {
+			display: flex;
+			gap: 2rem;
+			padding: 0;
+		}
+
+		.site-nav a {
+			padding-block: 0.5rem;
+			font-size: 1.0625rem;
+		}
+
+		.site-header__actions {
+			justify-self: end;
+		}
+
+		.site-header__phone {
+			display: block;
+		}
+	}
+</style>

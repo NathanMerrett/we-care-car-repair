@@ -1,0 +1,184 @@
+---
+// Internal page showing the design tokens and components. Hidden from search
+// engines and not linked from the site.
+import ImagePlaceholder from '../components/ImagePlaceholder.astro';
+import OpeningHours from '../components/OpeningHours.astro';
+import { business } from '../data/business';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const colours = [
+	{ token: '--color-red', use: 'Book button, accents, labels' },
+	{ token: '--color-red-hover', use: 'Red button on hover' },
+	{ token: '--color-ink', use: 'Dark sections and footer' },
+	{ token: '--color-ink-border', use: 'Borders on ink' },
+	{ token: '--color-ink-muted', use: 'Muted text on ink' },
+	{ token: '--color-ink-text', use: 'Text on ink' },
+	{ token: '--color-text', use: 'Body text' },
+	{ token: '--color-text-muted', use: 'Secondary text' },
+	{ token: '--color-border', use: 'Borders and dividers' },
+	{ token: '--color-bg-alt', use: 'Alternate sections' },
+	{ token: '--color-bg', use: 'Page background' },
+	{ token: '--color-surface', use: 'Cards' },
+];
+---
+
+<BaseLayout
+	title={`Style guide | ${business.name}`}
+	description="Design tokens and components for the site."
+	noindex
+>
+	<section class="section">
+		<div class="container">
+			<p class="eyebrow">Internal</p>
+			<h1>Style guide</h1>
+			<p class="lead intro">
+				The colours, type and components for the {business.name} site. The values live in
+				src/styles/global.css.
+			</p>
+		</div>
+	</section>
+
+	<section class="section section--alt">
+		<div class="container">
+			<h2>Colours</h2>
+			<ul class="swatches">
+				{
+					colours.map(({ token, use }) => (
+						<li class="swatch">
+							<span class="swatch__chip" style={`background: var(${token})`} />
+							<code>{token}</code>
+							<span class="swatch__use">{use}</span>
+						</li>
+					))
+				}
+			</ul>
+		</div>
+	</section>
+
+	<section class="section">
+		<div class="container stack">
+			<h2>Type</h2>
+			<p class="display">Display, for the home page hero</p>
+			<p class="sample-h1">Heading 1, for other page titles</p>
+			<h3>Heading 3, for cards and sub-sections</h3>
+			<p class="lead">Lead text, for the line under a page title. Barlow at a larger size.</p>
+			<p>
+				Body text in Barlow. Headings use Barlow Condensed in sentence case, never all caps.
+			</p>
+			<div>
+				<p class="eyebrow">Eyebrow label</p>
+				<h3>The small red label sits above a section heading</h3>
+			</div>
+		</div>
+	</section>
+
+	<section class="section section--alt">
+		<div class="container stack">
+			<h2>Buttons</h2>
+			<div class="row">
+				<a class="button button--primary" href="/book">Book online</a>
+				<a class="button button--secondary" href="/services">See services</a>
+				<a class="button button--primary button--small" href="/book">Small</a>
+			</div>
+		</div>
+	</section>
+
+	<section class="section section--ink">
+		<div class="container stack">
+			<h2>On ink</h2>
+			<p class="lead">Dark sections, like the home page hero, use the ink colours.</p>
+			<div class="row">
+				<a class="button button--primary" href="/book">Book online</a>
+				<a class="button button--secondary" href="/services">See services</a>
+			</div>
+			<ImagePlaceholder shot="Inside the workshop: bays and equipment" tone="dark" />
+		</div>
+	</section>
+
+	<section class="section">
+		<div class="container stack">
+			<h2>Image placeholder</h2>
+			<p>
+				Use until the real photo arrives. Label it with the shot that's needed.
+			</p>
+			<div class="grid">
+				<ImagePlaceholder shot="Workshop from outside, with signage" ratio="4 / 3" />
+				<ImagePlaceholder shot="Work in progress on a wet belt job" ratio="4 / 3" />
+			</div>
+		</div>
+	</section>
+
+	<section class="section section--alt">
+		<div class="container stack">
+			<h2>Opening hours</h2>
+			<div class="hours">
+				<OpeningHours />
+			</div>
+		</div>
+	</section>
+</BaseLayout>
+
+<style>
+	.intro {
+		max-width: 40rem;
+		margin-top: 1rem;
+	}
+
+	.stack > * + * {
+		margin-top: 1.5rem;
+	}
+
+	.row {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+	}
+
+	.grid {
+		display: grid;
+		gap: 1.5rem;
+	}
+
+	.swatches {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+		gap: 1.5rem;
+		margin: 2rem 0 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.swatch {
+		display: grid;
+		gap: 0.25rem;
+		font-size: var(--text-small);
+	}
+
+	.swatch__chip {
+		height: 4.5rem;
+		margin-bottom: 0.5rem;
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius);
+	}
+
+	.swatch__use {
+		color: var(--color-text-muted);
+	}
+
+	.sample-h1 {
+		font-family: var(--font-heading);
+		font-size: var(--text-h1);
+		font-weight: 700;
+		line-height: 1.05;
+	}
+
+	.hours {
+		max-width: 24rem;
+	}
+
+	@media (min-width: 48rem) {
+		.grid {
+			grid-template-columns: 1fr 1fr;
+		}
+	}
+</style>

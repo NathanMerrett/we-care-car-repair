@@ -1,0 +1,141 @@
+---
+import { business, isConfirmed } from '../data/business';
+import OpeningHours from './OpeningHours.astro';
+import Wordmark from './Wordmark.astro';
+
+const { street, locality, town, postcode } = business.address;
+const addressLines = [street, locality, town, postcode].filter(isConfirmed);
+
+const contactLinks = [
+	{ value: business.phone, href: `tel:${business.phone.replace(/\s/g, '')}`, label: business.phone },
+	{ value: business.email, href: `mailto:${business.email}`, label: business.email },
+	{ value: business.social.facebook, href: business.social.facebook, label: 'Facebook' },
+].filter((link) => isConfirmed(link.value));
+
+const footerNav = [
+	{ href: '/services', label: 'Services' },
+	{ href: '/contact', label: 'Find us' },
+	{ href: '/book', label: 'Book online' },
+];
+---
+
+<footer class="site-footer">
+	<div class="container site-footer__grid">
+		<div>
+			<Wordmark tone="light" />
+			<p class="site-footer__about">Independent garage at {locality}, {town}.</p>
+		</div>
+
+		<div>
+			<h2 class="site-footer__heading">Visit</h2>
+			<address>
+				{addressLines.map((line) => <span>{line}</span>)}
+			</address>
+			{
+				contactLinks.length > 0 && (
+					<ul class="site-footer__links">
+						{contactLinks.map((link) => (
+							<li>
+								<a href={link.href}>{link.label}</a>
+							</li>
+						))}
+					</ul>
+				)
+			}
+		</div>
+
+		<div>
+			<h2 class="site-footer__heading">Opening hours</h2>
+			<OpeningHours />
+		</div>
+	</div>
+
+	<div class="container site-footer__bottom">
+		<p>© {new Date().getFullYear()} {business.name}</p>
+		<nav aria-label="Footer">
+			<ul class="site-footer__nav">
+				{
+					footerNav.map((item) => (
+						<li>
+							<a href={item.href}>{item.label}</a>
+						</li>
+					))
+				}
+			</ul>
+		</nav>
+	</div>
+</footer>
+
+<style>
+	.site-footer {
+		background: var(--color-ink);
+		color: var(--color-ink-muted);
+		font-size: var(--text-small);
+	}
+
+	.site-footer__grid {
+		display: grid;
+		gap: 2.5rem;
+		padding-block: 3.5rem;
+	}
+
+	.site-footer__about {
+		max-width: 22rem;
+		margin-top: 1rem;
+	}
+
+	.site-footer__heading {
+		margin-bottom: 1rem;
+		font-size: 1rem;
+		font-weight: 600;
+		letter-spacing: 0.02em;
+		color: var(--color-ink-text);
+	}
+
+	address {
+		font-style: normal;
+	}
+
+	address span {
+		display: block;
+	}
+
+	.site-footer__links,
+	.site-footer__nav {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.site-footer__links {
+		margin-top: 1rem;
+	}
+
+	.site-footer a {
+		text-decoration: none;
+	}
+
+	.site-footer a:hover {
+		color: var(--color-ink-text);
+	}
+
+	.site-footer__bottom {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		gap: 1rem;
+		padding-block: 1.5rem;
+		border-top: 1px solid var(--color-ink-border);
+	}
+
+	.site-footer__nav {
+		display: flex;
+		gap: 1.5rem;
+	}
+
+	@media (min-width: 48rem) {
+		.site-footer__grid {
+			grid-template-columns: 2fr 1fr 1fr;
+		}
+	}
+</style>

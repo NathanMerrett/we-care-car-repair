@@ -1,0 +1,17 @@
+---
+// Holding page until the home page is built.
+import { business } from '../data/business';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const { locality, town } = business.address;
+---
+
+<!-- TODO: title and meta description once keyword research is done. -->
+<BaseLayout title={business.name} description={`Independent garage at ${locality}, ${town}.`}>
+	<section class="section">
+		<div class="container">
+			<h1>{business.name}</h1>
+			<p class="lead">The home page is next.</p>
+		</div>
+	</section>
+</BaseLayout>

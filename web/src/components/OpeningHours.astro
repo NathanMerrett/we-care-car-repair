@@ -1,0 +1,46 @@
+---
+// TODO(client): are you closed on Sundays and bank holidays? List them here
+// once confirmed.
+import { business } from '../data/business';
+
+// '18:30' becomes '6:30pm'
+function formatTime(time: string) {
+	const [hours, minutes] = time.split(':').map(Number);
+	const suffix = hours < 12 ? 'am' : 'pm';
+	return `${hours % 12 || 12}:${String(minutes).padStart(2, '0')}${suffix}`;
+}
+---
+
+<dl class="opening-hours">
+	{
+		business.openingHours.map(({ days, opens, closes }) => (
+			<div class="opening-hours__row">
+				<dt>{days}</dt>
+				<dd>
+					<time datetime={opens}>{formatTime(opens)}</time> –{' '}
+					<time datetime={closes}>{formatTime(closes)}</time>
+				</dd>
+			</div>
+		))
+	}
+</dl>
+
+<style>
+	.opening-hours {
+		margin: 0;
+	}
+
+	.opening-hours__row {
+		display: flex;
+		justify-content: space-between;
+		gap: 1rem;
+		padding-block: 0.375rem;
+		border-bottom: 1px solid color-mix(in oklch, currentColor 15%, transparent);
+	}
+
+	dd {
+		margin: 0;
+		font-weight: 500;
+		white-space: nowrap;
+	}
+</style>
